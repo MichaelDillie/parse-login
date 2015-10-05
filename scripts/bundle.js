@@ -3480,9 +3480,7 @@ function drainQueue() {
         currentQueue = queue;
         queue = [];
         while (++queueIndex < len) {
-            if (currentQueue) {
-                currentQueue[queueIndex].run();
-            }
+            currentQueue[queueIndex].run();
         }
         queueIndex = -1;
         len = queue.length;
@@ -3534,6 +3532,7 @@ process.binding = function (name) {
     throw new Error('process.binding is not supported');
 };
 
+// TODO(shtylman)
 process.cwd = function () { return '/' };
 process.chdir = function (dir) {
     throw new Error('process.chdir is not supported');
@@ -32587,6 +32586,9 @@ var React = require('react');
 module.exports = React.createClass({
 	displayName: "exports",
 
+	getInitialState: function getInitialState() {
+		return { error: null };
+	},
 	render: function render() {
 		return React.createElement(
 			"div",
@@ -32595,12 +32597,33 @@ module.exports = React.createClass({
 				"div",
 				{ className: "row" },
 				React.createElement(
-					"h1",
-					null,
-					"Login"
+					"form",
+					{ className: "form", onSubmit: this.onLogin },
+					React.createElement(
+						"h1",
+						null,
+						"Login"
+					),
+					React.createElement("input", { type: "text", className: "username-login", ref: "username" }),
+					React.createElement("input", { type: "password", className: "password-login", ref: "password" }),
+					React.createElement(
+						"button",
+						null,
+						"LogIn"
+					)
 				)
 			)
 		);
+	},
+	onLogin: function onLogin(e) {
+		e.preventDefault();
+		var user = new Parse.User();
+		Parse.User.logIn({
+			success: function success(user) {
+				console.log('loged in');
+			},
+			error: function error(user, _error) {}
+		});
 	}
 });
 
@@ -32769,6 +32792,8 @@ var React = require('react');
 var Backbone = require('backbone');
 window.$ = require('jquery');
 window.jQuery = $;
+
+Parse.initialize("IiQzs9Nbc1ejEKzCCPOr5g4eQoCAvXxlOIJdwka3", "dk6FNZcGQh1NQ5JEfJMU6Pyhmwx2ly6y4HjrBP1U");
 
 var NavigationComponent = require('./components/NavigationComponent');
 var HomeComponent = require('./components/HomeComponent');
