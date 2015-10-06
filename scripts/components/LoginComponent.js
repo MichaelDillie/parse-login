@@ -21,14 +21,21 @@ module.exports = React.createClass({
 	onLogin: function(e) {
 		e.preventDefault();
 		var user = new Parse.User();
-		Parse.User.logIn(
+		user.Login(
 			{
-			success: function(user) {
-				console.log('loged in');
+				username: this.refs.email.getDOMNode().value,
+				password: this.refs.password.getDOMNode().value,
 			},
-			error: function(user, error) {
-
+			{
+				success: (u) => {
+					this.props.router.navigate('dashboard', {trigger: true});
+				},
+				error: (u, error) => {
+					this.setState({
+						error: error.message
+					});
+				}
 			}
-		});
+		);
 	}
 });

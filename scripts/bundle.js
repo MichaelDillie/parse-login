@@ -32616,13 +32616,22 @@ module.exports = React.createClass({
 		);
 	},
 	onLogin: function onLogin(e) {
+		var _this = this;
+
 		e.preventDefault();
 		var user = new Parse.User();
-		Parse.User.logIn({
-			success: function success(user) {
-				console.log('loged in');
+		user.Login({
+			username: this.refs.email.getDOMNode().value,
+			password: this.refs.password.getDOMNode().value
+		}, {
+			success: function success(u) {
+				_this.props.router.navigate('dashboard', { trigger: true });
 			},
-			error: function error(user, _error) {}
+			error: function error(u, _error) {
+				_this.setState({
+					error: _error.message
+				});
+			}
 		});
 	}
 });
